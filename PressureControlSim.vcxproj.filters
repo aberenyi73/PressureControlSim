@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PressureControlSim.cpp">
+    <ClCompile Include="PressureControlSim2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
