@@ -119,7 +119,7 @@ void PressureControlThread() {
         // === BLOCKING WAIT ===
         // Thread goes to SLEEP here, consuming ZERO CPU
         // Only wakes up when ISR signals via semaphore
-        cout << "[THREAD] Waiting for pressure data (sleeping)... 💤\n";
+        cout << "[THREAD] Waiting for pressure data (sleeping) ...zZz\n";
 
         pressure_ready_sem.take();  // Equivalent to xSemaphoreTake()
 
@@ -132,7 +132,7 @@ void PressureControlThread() {
         float current_pressure = pressure_buffer.pressure_bar;
         int sample_num = pressure_buffer.sample_number;
 
-        cout << "\n[THREAD] ⏰ WOKE UP! (wakeup #" << wakeup_count << ")\n";
+        cout << "\n[THREAD] [wake] WOKE UP! (wakeup #" << wakeup_count << ")\n";
         cout << "[THREAD] Read Sample #" << sample_num
             << " | Pressure: " << fixed << setprecision(2)
             << current_pressure << " bar\n";
@@ -145,10 +145,10 @@ void PressureControlThread() {
             pump_adjustments++;
 
             if (error > 0) {
-                cout << "[THREAD] ⬆️  Pressure too LOW (" << current_pressure
+                cout << "[THREAD] [up]  Pressure too LOW (" << current_pressure
                     << " bar) - INCREASING pump speed\n";
             } else {
-                cout << "[THREAD] ⬇️  Pressure too HIGH (" << current_pressure
+                cout << "[THREAD] [down]  Pressure too HIGH (" << current_pressure
                     << " bar) - DECREASING pump speed\n";
             }
 
@@ -156,12 +156,12 @@ void PressureControlThread() {
             int pump_pwm_percent = static_cast<int>(50 + error * 10);
             pump_pwm_percent = max(0, min(100, pump_pwm_percent));  // Clamp 0-100
 
-            cout << "[THREAD] 🔧 Setting pump PWM to " << pump_pwm_percent << "%\n";
+            cout << "[THREAD] [pump] Setting pump PWM to " << pump_pwm_percent << "%\n";
 
             // Simulate time to adjust hardware (write to registers, etc.)
             this_thread::sleep_for(chrono::microseconds(50));
         } else {
-            cout << "[THREAD] ✅ Pressure OK (" << current_pressure
+            cout << "[THREAD] [OK] Pressure OK (" << current_pressure
                 << " bar) - No adjustment needed\n";
         }
 
